@@ -3,7 +3,7 @@
 # HWRP:: plugin
 #
 # Author:: Seth Vargo <sethvargo@gmail.com>
-# Author:: Seth Chisamore <schisamo@getchef.com>
+# Author:: Seth Chisamore <schisamo@chef.io>
 #
 # Copyright 2013-2014, Chef Software, Inc.
 #
@@ -142,8 +142,8 @@ EOH
            new_resource.version.to_sym == :latest
           Chef::Log.debug("#{new_resource} already installed - skipping")
         else
-          current_version = Gem::Version.new(current_resource.version)
-          new_version     = Gem::Version.new(new_resource.version)
+          current_version = plugin_version(current_resource.version)
+          new_version = plugin_version(new_resource.version)
 
           if current_version < new_version
             converge_by("Upgrade #{new_resource} from #{current_resource.version} to #{new_resource.version}", &install_block)
@@ -254,9 +254,9 @@ EOH
 
       # Compute some versions; Parse them as `Gem::Version` instances for easy
       # comparisons.
-      installed_version = local_plugin_data ? Gem::Version.new(local_plugin_data['plugin_version']) : nil
-      latest_version    = Gem::Version.new(remote_plugin_data['version'])
-      desired_version   = (plugin_version.to_sym == :latest) ? latest_version : Gem::Version.new(plugin_version)
+      installed_version = local_plugin_data ? plugin_version(local_plugin_data['plugin_version']) : nil
+      latest_version    = plugin_version(remote_plugin_data['version'])
+      desired_version   = (plugin_version.to_sym == :latest) ? latest_version : plugin_version(plugin_version)
 
       # Brute-force install all dependencies
       if opts[:install_deps] && remote_plugin_data['dependencies'].any?
@@ -360,7 +360,7 @@ EOH
     def plugin_universe
       @plugin_universe ||= begin
         ensure_update_center_present!
-        JSON.parse(IO.read(extracted_update_center_json))['plugins']
+        JSON.parse(IO.read(extracted_update_center_json).force_encoding('UTF-8'))['plugins']
       end
     end
 
@@ -396,6 +396,23 @@ EOH
       end
 
       plugin_manifest
+    end
+    #
+    # Return the plugin version for +version+.
+    # https://github.com/chef-cookbooks/jenkins/issues/292
+    # Prefer to use Gem::Version as that will be more accurate than
+    # comparing strings, but sadly Jenkins plugins may not always
+    # follow "normal" version patterns
+    #
+    # @param [String] version
+    # @return [String]
+    #
+    def plugin_version(version)
+      begin
+        plugin_version = Gem::Version.new(version)
+      rescue ArgumentError
+        plugin_version = version
+      end
     end
   end
 end

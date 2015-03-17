@@ -1,13 +1,13 @@
 jenkins Cookbook
 ================
-[![Build Status](http://img.shields.io/travis/opscode-cookbooks/jenkins.svg)][travis]
+[![Build Status](http://img.shields.io/travis/chef-cookbooks/jenkins.svg)][travis]
 
 
-[travis]: http://travis-ci.org/opscode-cookbooks/jenkins
+[travis]: http://travis-ci.org/chef-cookbooks/jenkins
 
 Installs and configures Jenkins CI master & node slaves. Resource providers to support automation via jenkins-cli, including job create/update.
 
-This project is managed by the CHEF Release Engineering team. For more information on the Release Engineering team's contribution, triage, and release process, please consult the [CHEF Release Engineering OSS Management Guide](https://docs.google.com/a/opscode.com/document/d/1oJB0vZb_3bl7_ZU2YMDBkMFdL-EWplW1BJv_FXTUOzg/edit).
+This project is managed by the CHEF Release Engineering team. For more information on the Release Engineering team's contribution, triage, and release process, please consult the [CHEF Release Engineering OSS Management Guide](https://docs.google.com/a/chef.io/document/d/1oJB0vZb_3bl7_ZU2YMDBkMFdL-EWplW1BJv_FXTUOzg/edit).
 
 Requirements
 ------------
@@ -142,7 +142,7 @@ jenkins_private_key_credentials 'wcoyote' do
 end
 ```
 
-The `:delete` action idempotently removes a set of Jenkins credentials from the system. You can use the base `jenkins_credentials` resource or any of it's children to perform the deletion.
+The `:delete` action idempotently removes a set of Jenkins credentials from the system. You can use the base `jenkins_credentials` resource or any of its children to perform the deletion.
 
 ```ruby
 jenkins_credentials 'wcoyote' do
@@ -168,7 +168,7 @@ This resource manages Jenkins jobs, supporting the following actions:
 
 The resource is fully idempotent and convergent. It also supports whyrun mode.
 
-The `:create` action requires a Jenkins job `config.xml`. This config file must exist on the target node and contain a valid Jenkins job configuration file. Because the Jenkins CLI actually reads and generates it's own copy of this file, **do NOT** write this configuration inside of the Jenkins job. We recommend putting them in Chef's file cache path:
+The `:create` action requires a Jenkins job `config.xml`. This config file must exist on the target node and contain a valid Jenkins job configuration file. Because the Jenkins CLI actually reads and generates its own copy of this file, **do NOT** write this configuration inside of the Jenkins job. We recommend putting them in Chef's file cache path:
 
 ```ruby
 xml = File.join(Chef::Config[:file_cache_path], 'bacon-config.xml')
@@ -217,7 +217,7 @@ This uses the Jenkins CLI to install plugins. By default, it does a cold deploy,
 - **A plugin's dependencies are also installed by default, this behavior can be disabled by setting the `install_deps` attribute to `false`.**
 - **This resource does not install plugin dependencies from a a given hpi/jpi URL - you must specify all plugin dependencies or Jenkins may not startup correctly!**
 
-The `:install` action idempotely installs a Jenkins plugin on the current node. The name attribute corresponds to the name of the plugin on the Jenkins Update Center. You can also specify a particular version of the plugin to install. Finally, you can specify a full source URL or local path (on the node) to a plugin.
+The `:install` action idempotently installs a Jenkins plugin on the current node. The name attribute corresponds to the name of the plugin on the Jenkins Update Center. You can also specify a particular version of the plugin to install. Finally, you can specify a full source URL or local path (on the node) to a plugin.
 
 ```ruby
 # Install the latest version of the greenballs plugin
@@ -305,7 +305,7 @@ The `jenkins_slave` resource is actually the base resource for several resources
 * `jenkins_jnlp_slave` - As JNLP Slave connections are slave initiated, this resource should be part of a __slave__'s run list.
 * `jenkins_ssh_slave` - As SSH Slave connections are master initiated, this resource should be part of a __master__'s run list.
 
-The `:create` action idempotely creates a Jenkins slave on the master. The name attribute corresponds to the name of the slave (which is also used to uniquely identify the slave).
+The `:create` action idempotently creates a Jenkins slave on the master. The name attribute corresponds to the name of the slave (which is also used to uniquely identify the slave).
 
 ```ruby
 # Create a basic JNLP slave
@@ -370,7 +370,7 @@ jenkins_ssh_slave 'executor' do
 end
 ```
 
-The `:connect` action idempotently forces the master to reconnect to the specified slave. You can use the base `jenkins_slave` resource or any of it's children to perform the connection.
+The `:connect` action idempotently forces the master to reconnect to the specified slave. You can use the base `jenkins_slave` resource or any of its children to perform the connection.
 
 ```ruby
 jenkins_slave 'builder' do
@@ -382,7 +382,7 @@ jenkins_ssh_slave 'executor' do
 end
 ```
 
-The `:disconnect` action idempotently forces the master to disconnect the specified slave. You can use the base `jenkins_slave` resource or any of it's children to perform the connection.
+The `:disconnect` action idempotently forces the master to disconnect the specified slave. You can use the base `jenkins_slave` resource or any of its children to perform the connection.
 
 ```ruby
 jenkins_slave 'builder' do
@@ -394,7 +394,7 @@ jenkins_ssh_slave 'executor' do
 end
 ```
 
-The `:online` action idempotently brings a slave back online. You can use the base `jenkins_slave` resource or any of it's children to bring the slave online.
+The `:online` action idempotently brings a slave back online. You can use the base `jenkins_slave` resource or any of its children to bring the slave online.
 
 ```ruby
 jenkins_slave 'builder' do
@@ -406,7 +406,7 @@ jenkins_ssh_slave 'executor' do
 end
 ```
 
-The `:offline` action idempotently takes a slave temporarily offline. An optional reason for going offline can be provided with the `offline_reason` attribute. You can use the base `jenkins_slave` resource or any of it's children to take a slave offline.
+The `:offline` action idempotently takes a slave temporarily offline. An optional reason for going offline can be provided with the `offline_reason` attribute. You can use the base `jenkins_slave` resource or any of its children to take a slave offline.
 
 ```ruby
 jenkins_slave 'builder' do
@@ -520,7 +520,7 @@ Please see the [Contributing](CONTRIBUTING.md) and [Issue Reporting](ISSUES.md) 
 License & Authors
 -----------------
 - Author: Seth Vargo <sethvargo@gmail.com>
-- Author: Seth Chisamore <schisamo@getchef.com>
+- Author: Seth Chisamore <schisamo@chef.io>
 - Original Author: Doug MacEachern <dougm@vmware.com>
 - Contributor: AJ Christensen <aj@junglist.gen.nz>
 - Contributor: Fletcher Nichol <fnichol@nichol.ca>
