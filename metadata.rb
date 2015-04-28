@@ -5,7 +5,7 @@ license          'Apache 2.0'
 description      'Installs and configures Jenkins CI master & slaves'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 #version          '2.2.1'
-version          '2015.03.06'
+version          '2016.01.01'
 recipe 'master', 'Installs a Jenkins master'
 
 depends 'apt',   '~> 2.0'
